@@ -6,20 +6,23 @@ public class GpsMap : MonoBehaviour
 {
     
     float initLon, initLat;
-    Vector3 playerCoordinates;
+    Vector2 playerCoordinates;
+    [SerializeField] RectTransform topPoint, bottomPoint, leftPoint, rightPoint, middlePoint;
     [SerializeField] float updatePosEvery = 2f;
+    [SerializeField] GameObject playerIcon;
 
     private void Start()
     {
-        StartCoroutine(IEStart());
+        //StartCoroutine(IEStart());
+        Debug.Log(middlePoint.position);
     }
 
     private void Update()
     {
-        if(!Input.location.isEnabledByUser)
-        {
-            return;
-        }
+        //if(!Input.location.isEnabledByUser)
+        //{
+        //    return;
+        //}
     }
 
     //makes sure location is enabled and finds initial lon and lat
@@ -57,17 +60,17 @@ public class GpsMap : MonoBehaviour
         {
             initLon = Input.location.lastData.longitude;
             initLat = Input.location.lastData.latitude;
-            playerCoordinates = new Vector3(initLon, 0f, initLat);
+            playerCoordinates = new Vector2(initLon, initLat);
+
         }
     }
 
     IEnumerator IEUpdate()
     {
-        Vector3 oldGPS = new Vector3(Input.location.lastData.longitude, 0f, Input.location.lastData.latitude);
+        Vector2 oldGPS = new Vector2(Input.location.lastData.longitude, Input.location.lastData.latitude);
         yield return new WaitForSeconds(updatePosEvery);
-        Vector3 newGPS = new Vector3(Input.location.lastData.longitude, 0f, Input.location.lastData.latitude);
-        Vector3 movement = newGPS - oldGPS;
+        Vector2 newGPS = new Vector2(Input.location.lastData.longitude, Input.location.lastData.latitude);
+        Vector2 movement = newGPS - oldGPS;
         playerCoordinates += movement;
     }
-
 }
