@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GpsMap : MonoBehaviour
+public class GPSPlayerOnMap : MonoBehaviour
 {
     
     float initLon, initLat;
@@ -14,7 +14,6 @@ public class GpsMap : MonoBehaviour
     private void Start()
     {
         //StartCoroutine(IEStart());
-        Debug.Log(middlePoint.position);
     }
 
     private void Update()
@@ -70,7 +69,21 @@ public class GpsMap : MonoBehaviour
         Vector2 oldGPS = new Vector2(Input.location.lastData.longitude, Input.location.lastData.latitude);
         yield return new WaitForSeconds(updatePosEvery);
         Vector2 newGPS = new Vector2(Input.location.lastData.longitude, Input.location.lastData.latitude);
-        Vector2 movement = newGPS - oldGPS;
-        playerCoordinates += movement;
+        //Vector2 movement = newGPS - oldGPS;
+        //playerCoordinates += movement;
+        playerCoordinates = newGPS;
+    }
+
+    public static float Lon(float lon)
+    {
+        var x = lon * 2 * Mathf.PI * 6378137 / 2 / 180;
+        return x;
+    }
+
+    public static float Lat(float lat)
+    {
+        var y = Mathf.Log(Mathf.Tan((90 + lat) * Mathf.PI / 360)) / (Mathf.PI / 180);
+        y = y * 2 * Mathf.PI * 6378137 / 2 / 180;
+        return y;
     }
 }
