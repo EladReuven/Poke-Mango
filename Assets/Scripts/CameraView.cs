@@ -8,7 +8,6 @@ public class CameraView : MonoBehaviour
 {
     WebCamTexture backCam;
     Texture defaultBackground;
-    List<WebCamTexture> backCamTextures;
     WebCamDevice[] backCamDevArr;
     bool camAvailable;
     int camToggle = 0;
