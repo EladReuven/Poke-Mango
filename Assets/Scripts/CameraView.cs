@@ -8,9 +8,9 @@ public class CameraView : MonoBehaviour
 {
     WebCamTexture backCam;
     Texture defaultBackground;
+    RenderTexture camRenderTexture;
     WebCamDevice[] backCamDevArr;
     bool camAvailable;
-    int camToggle = 0;
     float ratio;
     float scaleY;
     int orient;
@@ -24,12 +24,11 @@ public class CameraView : MonoBehaviour
 
     void Start()
     {
-        defaultBackground = background.texture;
+        //defaultBackground = background.texture;
         InitBackCamDevices();
         if(camAvailable)
         {
             camStatus.text = "Camera Available";
-            //backCam = backCamTextures[camToggle];
             backCam.Play();
             background.texture = backCam;
         }
@@ -44,21 +43,23 @@ public class CameraView : MonoBehaviour
     {
         if (!camAvailable)
             return;
+
         OperateCamera();
     }
 
     private void OperateCamera()
     {
-        camStatus.text = "Current camera: " + (camToggle + 1).ToString();
         background.texture = backCam;
-        
-        ratio = (float)backCam.width / (float)backCam.height;
-        ARFit.aspectRatio = ratio;
+        Graphics.Blit(backCam, camRenderTexture);
+        Camera.main.targetTexture = camRenderTexture;
 
-        scaleY = backCam.videoVerticallyMirrored ? -1f : 1f;
-        orient = -backCam.videoRotationAngle;
-        background.rectTransform.localScale = new Vector3(1f, scaleY, 1f);
-        background.rectTransform.localEulerAngles = new Vector3(0f, 0f, orient);
+        //ratio = (float)backCam.width / (float)backCam.height;
+        //ARFit.aspectRatio = ratio;
+
+        //scaleY = backCam.videoVerticallyMirrored ? -1f : 1f;
+        //orient = -backCam.videoRotationAngle;
+        //background.rectTransform.localScale = new Vector3(1f, scaleY, 1f);
+        //background.rectTransform.localEulerAngles = new Vector3(0f, 0f, orient);
     }
 
     private void InitBackCamDevices()
@@ -79,7 +80,7 @@ public class CameraView : MonoBehaviour
         }
 
         camAvailable = count > 0 ? true : false;
-        camStatus.text = camAvailable ? "CamAvailable": "CamNotAvailable";
+        camStatus.text = camAvailable ? "Cam Available": "Cam Not Available";
 
     }
 }
